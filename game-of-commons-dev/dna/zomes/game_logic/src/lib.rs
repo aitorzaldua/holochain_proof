@@ -1,26 +1,26 @@
-use hdk::prelude::*;
-use hdk::prelude::holo_hash::*;
-
-#[hdk_entry(id = "post")]
-pub struct Post(String);
-
-entry_defs![
-    Post::entry_def()
-];
-
-#[hdk_extern]
-pub fn create_post(post: Post) -> ExternResult<EntryHashB64> {
-    create_entry(&post)?;
-    let hash = hash_entry(&post)?;
-
-    Ok(EntryHashB64::from(hash))
+pub struct SomeExternalInput {
+    first_name: String,
+    last_name: String,
 }
 
-#[hdk_extern]
-pub fn get_post(entry_hash: EntryHashB64) -> ExternResult<Post> {
-    let element = get(EntryHash::from(entry_hash), GetOptions::default())?.ok_or(WasmError::Guest(String::from("Post not found")))?;
+pub struct SomeExternalOutput(String);
 
-    let post: Post = element.entry().to_app_option()?.ok_or(WasmError::Guest(String::from("Malformed post")))?;
+pub fn hello_world(_:()) -> ExternResult<SomeExternalOutput> {
+    let message: String = String::from("Hello world");
+    let output: SomeExternalOutput = SomeExternalOutput(message);
+    
+    Ok(output)
+}
 
-    Ok(post)
+pub fn say_my_name(external_input: SomeExternalInput) -> ExternResult<SomeExternalOutput> {
+    let message: String = format!("Your name is {} {}", 
+                                    external_input.first_name, 
+                                    external_input.last_name);
+    let output: SomeExternalOutput = SomeExternalOutput(message);
+    
+    Ok(output)
+}
+
+pub fn get_agent_id(_:()) -> ExternResult<AgentInfo> {
+    Ok(agent_info()?)
 }

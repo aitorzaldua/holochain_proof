@@ -21,7 +21,7 @@
 
 <main>
 	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<p>This is an app build with Holochain.</p>
 
 	{#if postHash}
 		<span>Created new Holochain entry! Post with hash {postHash}</span>
@@ -36,6 +36,7 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
+		background-color: antiquewhite;
 	}
 
 	h1 {
